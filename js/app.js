@@ -25,6 +25,7 @@ Enemy.prototype.update = function(dt) {
 }
 
 Enemy.randomRowAndSpeed = function() {
+    this.x = -101;
     var yLocations = [220, 137, 54];
     var randomIndex = Math.floor((Math.random() * 10)/4);
     this.y = yLocations[randomIndex] || 54;
