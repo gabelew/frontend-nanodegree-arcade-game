@@ -6,7 +6,6 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = -101;
     // Enemy can appear randomly in each of the 3 chosen rows
     Enemy.randomRowAndSpeed.call(this);
 }
@@ -19,7 +18,6 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += 80 * this.speed * dt;
     if (this.x > 505) {
-        this.x = -101;
         Enemy.randomRowAndSpeed.call(this);
     }
 }
@@ -43,7 +41,7 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function() {
-    this.sprite = 'images/char-boy.png';
+    Player.chooseRandomCharacter.call(this);
     this.x = 202;
     this.y = 386;
 }
@@ -55,10 +53,11 @@ Player.prototype.update = function() {
     else if (this.y <= -29) {
         this.x = 202;
         this.y = 386;
+        Player.chooseRandomCharacter.call(this);
     }
 }
 
-Player.prototype.render = function() {    
+Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
@@ -70,6 +69,18 @@ Player.prototype.handleInput = function(key) {
     else if (key === 'up') 
         this.y -= 83;
     else this.y += 83;
+}
+
+Player.chooseRandomCharacter = function() {
+    var characters = [
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png'
+    ];
+    var randomIndex = Math.ceil((Math.random() * 10)/2);
+    this.sprite = characters[randomIndex] || 'images/char-boy.png';
 }
 
 // Now instantiate your objects.
