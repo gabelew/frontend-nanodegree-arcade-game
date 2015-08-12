@@ -25,11 +25,41 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
+var Player = function() {
+    this.sprite = 'images/char-boy.png';
+    this.x = 202;
+    this.y = 386;
+}
+
+Player.prototype.update = function() {
+    if (this.x < 0) this.x += 101;
+    else if (this.x > 404) this.x -= 101;
+    if (this.y > 386) this.y = 386;
+    else if (this.y <= -29) {
+        this.x = 202;
+        this.y = 386;
+    }
+}
+
+Player.prototype.render = function() {    
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(key) {
+    if (key === 'left')
+        this.x -= 101;
+    else if (key === 'right')
+        this.x += 101;
+    else if (key === 'up') 
+        this.y -= 83;
+    else this.y += 83;
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
+var allEnemies = [];
+var player = new Player();
 
 
 // This listens for key presses and sends the keys to your
