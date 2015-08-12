@@ -71,6 +71,12 @@ Player.prototype.handleInput = function(key) {
     else this.y += 83;
 }
 
+Player.prototype.die = function() {
+    this.x = 202;
+    this.y = 386;
+    Player.chooseRandomCharacter.call(this);
+}
+
 Player.chooseRandomCharacter = function() {
     var characters = [
         'images/char-boy.png',
