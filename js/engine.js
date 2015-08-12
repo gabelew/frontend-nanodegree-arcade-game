@@ -22,12 +22,29 @@ var Engine = (function(global) {
     var doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
+        scoreInfo = doc.createElement('canvas'),
+        playerInfo = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        ptx = playerInfo.getContext('2d'),
+        stx = scoreInfo.getContext('2d'),
+        numLives = 3,
+        collided = false,
+        won = false,
+        wins = 0,
+        lastTime,
+        CANVAS_HEIGHT = 606,
+        SIDEBAR_WIDTH = 150;
 
     canvas.width = 505;
-    canvas.height = 606;
+    canvas.height = CANVAS_HEIGHT;
+    playerInfo.width = SIDEBAR_WIDTH;
+    playerInfo.height = CANVAS_HEIGHT;
+    scoreInfo.width = SIDEBAR_WIDTH;
+    scoreInfo.height = CANVAS_HEIGHT;
+
+    doc.body.appendChild(scoreInfo);
     doc.body.appendChild(canvas);
+    doc.body.appendChild(playerInfo);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -81,6 +98,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        if (numLives === 0) reset();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -94,19 +112,29 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        if (player.y <= -29) {
+            wins++;
+            won = true;
+        } 
         player.update();
     }
 
     function checkCollisions() {
         allEnemies.forEach(function(enemy) {
             if (enemy.y === player.y) {
-                var enemyXPos = Math.floor(enemy.x);
-                for (var i = player.x - 60; i < player.x + 55; i++) {
-                    if (enemyXPos === i) player.die();
+                //var enemyXPos = Math.floor(enemy.x);
+                if (collides(player, enemy)) {
+                    player.die();
+                    numLives--;
+                    collided = true;  
                 }
             }
         });
+    }
 
+    function collides(a, b) {
+        return a.x < b.x + b.width &&
+            a.x + a.width > b.x;
     }
 
     /* This function initially draws the "game level", it will then call
@@ -165,6 +193,21 @@ var Engine = (function(global) {
         });
 
         player.render();
+        if (collided) {
+            ptx.clearRect(0, 0, playerInfo.width, playerInfo.height);
+            collided = false;
+        }
+        if (won) {
+            stx.clearRect(0, 0, scoreInfo.width, scoreInfo.height);
+            won = false;
+        }
+        for (var k = 0; k < numLives; k++) {
+            ptx.drawImage(Resources.get('images/Heart.png'), 0, k * 100)
+        }
+        stx.textAlign = 'center';
+        stx.font = '48px serif';
+        stx.fillText('Wins:', 60, 100);
+        stx.fillText(wins, 60, 150);
     }
 
     /* This function does nothing but it could have been a good place to
@@ -172,7 +215,11 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        stx.clearRect(0, 0, scoreInfo.width, scoreInfo.height);
+        ptx.clearRect(0, 0, playerInfo.width, playerInfo.height);
+        numLives = 3;
+        wins = 0;
+        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -188,7 +235,8 @@ var Engine = (function(global) {
         'images/char-cat-girl.png',
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
-        'images/char-princess-girl.png'
+        'images/char-princess-girl.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 

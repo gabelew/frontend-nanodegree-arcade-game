@@ -6,8 +6,9 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.width = 80;
     // Enemy can appear randomly in each of the 3 chosen rows
-    Enemy.randomRowAndSpeed.call(this);
+    this.randomRowAndSpeed();
 }
 
 // Update the enemy's position, required method for game
@@ -18,11 +19,11 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += 80 * this.speed * dt;
     if (this.x > 505) {
-        Enemy.randomRowAndSpeed.call(this);
+        this.randomRowAndSpeed();
     }
 }
 
-Enemy.randomRowAndSpeed = function() {
+Enemy.prototype.randomRowAndSpeed = function() {
     this.x = -101;
     var yLocations = [220, 137, 54];
     var randomIndex = Math.floor((Math.random() * 10)/4);
@@ -41,7 +42,12 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function() {
-    Player.chooseRandomCharacter.call(this);
+    this.width = 60;
+    this.reset();
+}
+
+Player.prototype.reset = function() {
+    this.chooseRandomCharacter();
     this.x = 202;
     this.y = 386;
 }
@@ -53,7 +59,7 @@ Player.prototype.update = function() {
     else if (this.y <= -29) {
         this.x = 202;
         this.y = 386;
-        Player.chooseRandomCharacter.call(this);
+        this.chooseRandomCharacter();
     }
 }
 
@@ -76,7 +82,7 @@ Player.prototype.die = function() {
     this.y = 386;
 }
 
-Player.chooseRandomCharacter = function() {
+Player.prototype.chooseRandomCharacter = function() {
     var characters = [
         'images/char-boy.png',
         'images/char-cat-girl.png',
