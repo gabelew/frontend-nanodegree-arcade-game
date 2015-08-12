@@ -80,6 +80,9 @@ Player.chooseRandomCharacter = function() {
         'images/char-princess-girl.png'
     ];
     var randomIndex = Math.ceil((Math.random() * 10)/2);
+    // Ensures next character is different from current one
+    if (this.sprite === characters[randomIndex]) 
+        randomIndex = (randomIndex + 1) % 5;
     this.sprite = characters[randomIndex] || 'images/char-boy.png';
 }
 
