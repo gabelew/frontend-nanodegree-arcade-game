@@ -8,8 +8,7 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     this.x = -101;
     // Enemy can appear randomly in each of the 3 chosen rows
-    this.y =  randomRow() || 54;
-    this.speed = randomSpeed();
+    Enemy.randomRowAndSpeed.call(this);
 }
 
 // Update the enemy's position, required method for game
@@ -21,20 +20,17 @@ Enemy.prototype.update = function(dt) {
     this.x += 80 * this.speed * dt;
     if (this.x > 505) {
         this.x = -101;
-        this.y = randomRow();
-        this.speed = randomSpeed();
+        Enemy.randomRowAndSpeed.call(this);
     }
 }
 
-function randomRow() {
+Enemy.randomRowAndSpeed = function() {
     var yLocations = [220, 137, 54];
     var randomIndex = Math.floor((Math.random() * 10)/4);
-    return yLocations[randomIndex];
-}
+    this.y = yLocations[randomIndex] || 54;
+    this.speed = Math.ceil((Math.random() * 10)/2) || 2;
+};
 
-function randomSpeed() {
-    return Math.ceil((Math.random() * 10)/2);
-}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
