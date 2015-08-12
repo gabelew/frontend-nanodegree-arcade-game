@@ -74,7 +74,6 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.die = function() {
     this.x = 202;
     this.y = 386;
-    Player.chooseRandomCharacter.call(this);
 }
 
 Player.chooseRandomCharacter = function() {
@@ -96,7 +95,7 @@ Player.chooseRandomCharacter = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-for (var i = 0; i < 6; i++) {
+for (var i = 0; i < 5; i++) {
     allEnemies.push(new Enemy());
 }
 var player = new Player();
