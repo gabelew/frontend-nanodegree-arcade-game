@@ -1,6 +1,4 @@
-frontend-nanodegree-arcade-game
+Frogger Game demonstrating Object-Oriented JS with prototypal classes
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
-
-for self-checking their submission.
+Final project for the Udacity [Object-Oriented JavaScript](https://www.udacity.com/course/object-oriented-javascript--ud015) course.
